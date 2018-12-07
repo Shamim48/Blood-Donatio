@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+
+        <item
+            android:id="@+id/nav_phone"
+            android:title="Phone"
+            android:icon="@drawable/smartphone"
+            />
+        <item
+            android:id="@+id/nav_blood_gp"
+            android:title="Blood Group"
+            android:icon="@drawable/red_blood"
+            />
+        <item
+            android:id="@+id/nav_last_donate"
+            android:title="Last Donate Date"
+            android:icon="@drawable/red_last_donate"
+            />
+
+        <item
+            android:id="@+id/how_much_donate"
+            android:title="already 0 times Donated"
+            android:icon="@drawable/_time_donate"
+            />
+
+
+
+    <item
+        android:title="Widgets"
+        />
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/menu_edit_profile"
+            android:title="Edit Profile"
+            android:icon="@drawable/edit_for_nav_menu"
+            />
+        <item
+            android:id="@+id/logout_button"
+            android:title="Logout"
+            android:icon="@drawable/log_out_icon"/>
+
+        <item
+            android:id="@+id/menu_about_us"
+            android:title="About Us"
+            android:icon="@drawable/about_app"/>
+        <item
+            android:id="@+id/menu_share_id"
+            android:title="Share"
+            android:icon="@drawable/ic_share"/>
+
+
+
+    </group>
+
+
+
+
+</menu>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditProfile"
+    android:orientation="vertical"
+    android:layout_margin="10dp"
+    >
+
+    <LinearLayout
+        android:paddingTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/edit_pro_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:civ_border_width="2dp"
+        app:civ_border_color="#e92538"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/add_image_icon"
+
+        />
+    <EditText android:id="@+id/edit_pro_phon"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:inputType="number"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:hint="Phone"
+        android:paddingLeft="15dp"
+        android:background="@drawable/et_back_red"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        />
+    <EditText android:id="@+id/edit_pro_lastdonate"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:inputType="text"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:hint="Last Donate Date"
+        android:paddingLeft="15dp"
+        android:background="@drawable/et_back_red"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        />
+    <EditText android:id="@+id/edit_pro_howmuch"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:hint="How much Donate"
+        android:paddingLeft="15dp"
+        android:background="@drawable/et_back_red"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        />
+
+        <Button
+            android:id="@+id/upload_button"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:text="Update"
+            android:background="@drawable/et_back_red"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            />
+    </LinearLayout>
+
+
+</LinearLayout>

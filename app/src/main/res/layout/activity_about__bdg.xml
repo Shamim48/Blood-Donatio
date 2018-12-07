@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:orientation="vertical"
+    tools:context=".About_BDG">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+           <ImageView
+               android:layout_width="match_parent"
+               android:layout_height="270dp"
+               android:src="@drawable/bloodhome"
+               />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="About Blood Donation Group"
+                android:textColor="#fded4015"
+                android:textSize="28dp"
+                android:layout_marginBottom="5dp"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:textSize="25dp"
+                android:text="হাসবে রুগী বাঁচবে প্রাণ আসুন করি রক্তদান ।"
+                android:paddingLeft="5dp"
+                />
+
+            <TextView
+                android:paddingLeft="5dp"
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal"
+                android:textColor="#000"
+                android:textSize="20dp"
+                android:text="পড়াশুনার পাশাপাশি মানবিক ডাকে সাড়া দিতেও জুড়ি নেই ফেনী কম্পিউটার ইন্সটিটিউটের  শিক্ষার্থীদের। ফেনী জেলার মধ্যে প্রচুর সংখ্যক রক্তের চাহিদা মিটাতে প্রতিনিয়ত কাজ করে যাচ্ছে আমাদের ব্লাড ডোনেশান গ্রুপ ইন্সটিটিউটের প্রায় সকল শিক্ষক এবং শিক্ষার্থী যারা রক্তদানে সক্ষম তারা সকলেই প্রতি ৪ মাস পর পর রক্তদান করে মানবিক ডাকে সাড়া প্রদান করে।পৃথিবীর মানুষরা যখন বর্বরতার দিকে ধাবিত হচ্ছে তখন আমাদের ব্লাড ডোনেশান গ্রুপ কাজ করে যাচ্ছে মানুষের জীবন বাঁচাতে। শুধুমাত্র রক্তদান নয়, সেটার পাশাপাশি বিভিন্ন মানবিক কাজেও সহায়তা করছে এই গ্রুপের সদস্যরা।" />
+            <TextView
+                android:paddingLeft="5dp"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textColor="#000"
+                android:textSize="20dp"
+                android:layout_height="wrap_content"
+                android:text="যার মধ্যে রয়েছে সুবিধা বঞ্চিতদের মাঝে ঈদ বস্ত্র বিতরণ, বিনামূল্যে রক্তের গ্রুপ নির্ণয় কর্মসূচী, বিভিন্ন দিবসে স্বেচ্ছায় রক্তদান, বৃক্ষ রোপণ অভিযান, সাধারণ শিক্ষার্থীদের মাঝে রক্ত বিষয় সচেতনতা সৃষ্টি, সবার  মাঝে দেশ প্রেম তৈরি করা সহ মানব হিতৈষী বিভিন্ন কার্যক্রম পরিচালনা করছে এই সংগঠন।এছাড়া যে কোন জাতীয় বিপর্যয় (যেমন বন্যা বা প্রাকৃতিক দুর্যোগে) সৃষ্টি হলে গ্রুপের স্বেচ্ছাসেবকরা কাজ করে দেশের স্বার্থে।নিজের পকেটের টাকায়, নিজের শারীরিক শ্রমের মাধ্যমে দেশ প্রেম ও শৃঙ্খলাকে পুঁজি করে  মানষ তথা মানবতার জন্যে কাজ করে যাচ্ছে FCI Bloood Donation Group."
+                />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
+</LinearLayout>
