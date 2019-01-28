@@ -32,8 +32,10 @@ public class Forgot_activity extends AppCompatActivity {
         send_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                send_btn.setClickable(false);
                 if (email.getText().toString().isEmpty()){
                     Toast.makeText(Forgot_activity.this,"Email is Empty",Toast.LENGTH_LONG).show();
+                    send_btn.setClickable(true);
                 }else {
 
 
@@ -43,8 +45,10 @@ public class Forgot_activity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
                                         Toast.makeText(Forgot_activity.this,"Email sent.",Toast.LENGTH_LONG).show();
+                                        send_btn.setClickable(true);
                                     }else {
-                                        Toast.makeText(Forgot_activity.this,"Email sent.",Toast.LENGTH_LONG).show();
+                                        Toast.makeText(Forgot_activity.this,"Email Not sent.",Toast.LENGTH_LONG).show();
+                                        send_btn.setClickable(true);
                                     }
                                 }
                             });

@@ -12,10 +12,12 @@ import android.support.v7.widget.CardView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ActionBar actionBar=getSupportActionBar();
         actionBar.setTitle("Home");
         actionBar.setDisplayHomeAsUpEnabled(true);
+
 
         drawer = findViewById(R.id.drawer_layout);
         toggle=new ActionBarDrawerToggle(this,drawer,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
@@ -151,6 +154,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
 
+                if (!task.isSuccessful()){
+                    Toast.makeText(MainActivity.this, "Data Not Found", Toast.LENGTH_LONG).show();
+                }
                 DocumentSnapshot doc = task.getResult();
                 if (doc.exists()) {
 
@@ -282,13 +288,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent=new Intent(getApplicationContext(),About_Us.class);
             startActivity(intent);
         }
+        if (menuItem.getItemId()==R.id.menu_share_id){
+            Intent intent=new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(android.content.Intent.EXTRA_TITLE,"FCI Blood Bank");
+            intent.putExtra(android.content.Intent.EXTRA_TEXT,"Give Blood Save Life");
+            startActivity(Intent.createChooser(intent,"Share via..."));
+        }
 
         return true;
     }
 
     private void logout() {
-        Intent intent=new Intent(getApplicationContext(),Login_activity.class);
-        startActivity(intent);
         mAuth.signOut();
+        Intent intent=new Intent(getApplicationContext(),Login_activity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 }

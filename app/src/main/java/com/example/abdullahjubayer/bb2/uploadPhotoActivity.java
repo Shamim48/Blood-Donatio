@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -54,6 +55,7 @@ public class uploadPhotoActivity extends AppCompatActivity {
     String nameof_writer;
     String imageof_writer;
     String message;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,9 @@ public class uploadPhotoActivity extends AppCompatActivity {
         mEditTextFileName = findViewById(R.id.edit_text_file_name);
         mImageView = findViewById(R.id.image_view);
 
+        progressBar = (ProgressBar)findViewById(R.id.spin_kit_upload);
+        FadingCircle fadingCircle = new FadingCircle();
+        progressBar.setIndeterminateDrawable(fadingCircle);
 
 
 
@@ -87,17 +92,24 @@ public class uploadPhotoActivity extends AppCompatActivity {
         mButtonUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                progressBar.setVisibility(View.VISIBLE);
+                mButtonUpload.setClickable(false);
+
                 message=mEditTextFileName.getText().toString();
                 if (mImageUri!=null){
                     if ( !message.isEmpty()){
                         uploadImage(message);
                     }else {
                         Toast.makeText(uploadPhotoActivity.this,"Text is Empty",Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.INVISIBLE);
+                        mButtonUpload.setClickable(true);
                     }
                 }
                 else {
                     Toast.makeText(uploadPhotoActivity.this,"Image Not Select",Toast.LENGTH_SHORT).show();
-
+                    progressBar.setVisibility(View.INVISIBLE);
+                    mButtonUpload.setClickable(true);
                 }
 
             }
@@ -144,12 +156,16 @@ public class uploadPhotoActivity extends AppCompatActivity {
 
                             if (message.isEmpty()){
                                 Toast.makeText(uploadPhotoActivity.this,"Please Write Something",Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.INVISIBLE);
+                                mButtonUpload.setClickable(true);
                             }else {
                                 if (!nameof_writer.isEmpty() && !imageof_writer.isEmpty() && !message.isEmpty() && !down_Url.isEmpty()){
                                     uploadData(message,down_Url,nameof_writer,imageof_writer);
                                 }
                                 else {
                                     Toast.makeText(uploadPhotoActivity.this,"Something Missing",Toast.LENGTH_SHORT).show();
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                    mButtonUpload.setClickable(true);
                                 }
                             }
 
@@ -157,12 +173,16 @@ public class uploadPhotoActivity extends AppCompatActivity {
 
                     } else {
                         Toast.makeText(uploadPhotoActivity.this, "Picture Upload failed.", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.INVISIBLE);
+                        mButtonUpload.setClickable(true);
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(uploadPhotoActivity.this, "Picture Upload failed.", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
+                    mButtonUpload.setClickable(true);
                 }
             });
 
@@ -179,11 +199,15 @@ public class uploadPhotoActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Toast.makeText(uploadPhotoActivity.this, "Upload successful", Toast.LENGTH_LONG).show();
+                progressBar.setVisibility(View.INVISIBLE);
+                mButtonUpload.setClickable(true);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(uploadPhotoActivity.this, "Upload Failed", Toast.LENGTH_LONG).show();
+                progressBar.setVisibility(View.INVISIBLE);
+                mButtonUpload.setClickable(true);
             }
         });
 

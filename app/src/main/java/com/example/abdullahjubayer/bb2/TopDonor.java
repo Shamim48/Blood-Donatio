@@ -22,11 +22,11 @@ public class TopDonor extends AppCompatActivity implements View.OnClickListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_top_donor);
+        setContentView(R.layout.top_donor);
 
 
         ActionBar actionBar=getSupportActionBar();
-        actionBar.setTitle("Search Donor");
+        actionBar.setTitle("Top Donor");
 
 
         a_positive=findViewById(R.id.top_donor_a_plus);

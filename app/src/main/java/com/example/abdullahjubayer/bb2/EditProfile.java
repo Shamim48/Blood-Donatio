@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -36,12 +38,16 @@ public class EditProfile extends AppCompatActivity {
     FirebaseFirestore db;
     String bll, ell,phn,last_date,how_m,gender_m;
     Button up_button;
+    ProgressBar progressBar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+
+        mStorageRef = FirebaseStorage.getInstance().getReference("editable_photo");
+        db = FirebaseFirestore.getInstance();
 
         Intent intent = getIntent();
         bll = intent.getStringExtra("Blood_group");
@@ -51,9 +57,10 @@ public class EditProfile extends AppCompatActivity {
         how_m=intent.getStringExtra("How_Much");
         gender_m=intent.getStringExtra("Gender");
 
+        progressBar=findViewById(R.id.spin_kit_edit);
+        FadingCircle fadingCircle = new FadingCircle();
+        progressBar.setIndeterminateDrawable(fadingCircle);
 
-        mStorageRef = FirebaseStorage.getInstance().getReference("editable_photo");
-        db = FirebaseFirestore.getInstance();
 
 
         e_phone = findViewById(R.id.edit_pro_phon);
@@ -73,6 +80,8 @@ public class EditProfile extends AppCompatActivity {
         up_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
+                up_button.setClickable(false);
                 uploadImage();
             }
         });
@@ -137,12 +146,16 @@ public class EditProfile extends AppCompatActivity {
 
                     } else {
                         Toast.makeText(EditProfile.this, "Picture Upload failed.", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.INVISIBLE);
+                        up_button.setClickable(true);
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(EditProfile.this, "Picture Upload failed.", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
+                    up_button.setClickable(true);
                 }
             });
 
@@ -182,6 +195,8 @@ public class EditProfile extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
 
                         update2_no_image();
+                        progressBar.setVisibility(View.INVISIBLE);
+                        up_button.setClickable(true);
 
                     }
                 })
@@ -189,6 +204,8 @@ public class EditProfile extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(EditProfile.this, "Updated Failed", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.INVISIBLE);
+                        up_button.setClickable(true);
                     }
                 });
 
@@ -220,6 +237,8 @@ public class EditProfile extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
 
                         update2_with_image();
+                        progressBar.setVisibility(View.INVISIBLE);
+                        up_button.setClickable(true);
 
                     }
 
@@ -227,6 +246,8 @@ public class EditProfile extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(EditProfile.this, "Updated Failed..!", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.INVISIBLE);
+                up_button.setClickable(true);
             }
         });
 
@@ -249,7 +270,10 @@ public class EditProfile extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         Toast.makeText(EditProfile.this, "Updated Successfully", Toast.LENGTH_SHORT).show();
                         Intent intent=new Intent(getApplicationContext(),Login_activity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
+                        progressBar.setVisibility(View.INVISIBLE);
+                        up_button.setClickable(true);
                     }
                 });
     }
@@ -268,7 +292,10 @@ public class EditProfile extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         Toast.makeText(EditProfile.this, "Updated Successfully", Toast.LENGTH_SHORT).show();
                         Intent intent=new Intent(getApplicationContext(),Login_activity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
+                        progressBar.setVisibility(View.INVISIBLE);
+                        up_button.setClickable(true);
                     }
                 });
 

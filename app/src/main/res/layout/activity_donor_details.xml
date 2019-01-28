@@ -4,10 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".DonorDetails"
     android:orientation="vertical"
-    android:layout_margin="20dp"
+    android:paddingBottom="15dp"
     android:background="#FFFFE8"
     >
 
@@ -31,8 +31,10 @@
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:textSize="20sp"
-            android:text="Name"
+            android:text="Name "
             android:id="@+id/details_name"
+            android:maxLines="1"
+            android:ellipsize="end"
             />
         <TextView
             android:layout_width="match_parent"
@@ -81,6 +83,8 @@
             android:textSize="20sp"
             android:text="Village"
             android:id="@+id/details_village"
+            android:maxLines="1"
+            android:ellipsize="end"
             />
         <TextView
             android:layout_width="match_parent"
@@ -89,6 +93,8 @@
             android:textSize="20sp"
             android:text="Upazilla"
             android:id="@+id/details_upazilla"
+            android:maxLines="1"
+            android:ellipsize="end"
             />
 
 

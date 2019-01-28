@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -63,7 +64,7 @@ public class Photo_gallery extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private ImageAdapter mAdapter;
 
-    private ProgressBar mProgressCircle;
+    private ProgressBar progressBar;
 
     FirebaseFirestore db;
     private List<Upload> mUploads;
@@ -78,7 +79,11 @@ public class Photo_gallery extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        mProgressCircle = findViewById(R.id.progress_circle);
+        progressBar = findViewById(R.id.spin_kit_gallery);
+        FadingCircle fadingCircle = new FadingCircle();
+        progressBar.setIndeterminateDrawable(fadingCircle);
+
+        progressBar.setVisibility(View.VISIBLE);
 
         mUploads = new ArrayList<>();
 
@@ -108,12 +113,15 @@ public class Photo_gallery extends AppCompatActivity {
                             mAdapter = new ImageAdapter(Photo_gallery.this, mUploads);
                             mAdapter.notifyDataSetChanged();
                              mRecyclerView.setAdapter(mAdapter);
-                            mProgressCircle.setVisibility(View.INVISIBLE);
+                            progressBar.setVisibility(View.INVISIBLE);
+
                         }
                     });
 
                 }else {
                     Toast.makeText(Photo_gallery.this,"Data Not Found",Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.INVISIBLE);
+
                 }
             }
         });

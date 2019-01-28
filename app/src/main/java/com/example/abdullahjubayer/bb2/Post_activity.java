@@ -17,9 +17,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -42,11 +44,16 @@ public class Post_activity extends AppCompatActivity {
     Calendar calander;
     SimpleDateFormat simpledateformat;
     String Date;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.post_activity);
+
+        progressBar=findViewById(R.id.spin_kit_post);
+        FadingCircle fadingCircle = new FadingCircle();
+        progressBar.setIndeterminateDrawable(fadingCircle);
 
         Intent intent=getIntent();
             User_name=intent.getStringExtra("send_name");
@@ -134,19 +141,21 @@ public class Post_activity extends AppCompatActivity {
                         .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-
+                                        progressBar.setVisibility(View.VISIBLE);
                                         User_message=eee.getText().toString();
 
-                                        simpledateformat = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
+                                        simpledateformat = new SimpleDateFormat("dd/MM/yyy HH:mm");
                                         Date = simpledateformat.format(calander.getTime());
 
                                         if (User_message.isEmpty()){
+                                            progressBar.setVisibility(View.INVISIBLE);
                                             Toast.makeText(Post_activity.this,"Please Write Something",Toast.LENGTH_SHORT).show();
                                         }else {
                                             if (!User_name.isEmpty() && !User_img.isEmpty() && !User_message.isEmpty() && !Date.isEmpty()){
                                                 saveMessage(User_name,User_img,User_message,Date);
                                             }
                                             else {
+                                                progressBar.setVisibility(View.INVISIBLE);
                                                 Toast.makeText(Post_activity.this,"Something Missing",Toast.LENGTH_SHORT).show();
                                             }
                                         }
@@ -195,11 +204,13 @@ public class Post_activity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     Toast.makeText(Post_activity.this,"Request Sent",Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
             }).addOnFailureListener(Post_activity.this, new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(Post_activity.this,"Request Failed..!",Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
             });
     }

@@ -16,11 +16,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -56,6 +58,7 @@ public class Add_Donor extends AppCompatActivity  {
     Spinner spinner,spinner2;
     ArrayAdapter<CharSequence> adapterGender;
     ArrayAdapter<CharSequence> adapterBlood;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +81,10 @@ public class Add_Donor extends AppCompatActivity  {
         spinner2=findViewById(R.id.blood_select_spinner);
         d_email=findViewById(R.id.donor_email);
         d_pass=findViewById(R.id.donor_password);
+        progressBar=findViewById(R.id.spin_kit_new_donor);
+
+        FadingCircle fadingCircle = new FadingCircle();
+        progressBar.setIndeterminateDrawable(fadingCircle);
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
         db = FirebaseFirestore.getInstance();
@@ -110,6 +117,8 @@ public class Add_Donor extends AppCompatActivity  {
                 if (validate()){
 
                         createuser();
+                        progressBar.setVisibility(View.VISIBLE);
+                        save_button.setClickable(false);
 
                     }
                 else {
@@ -182,12 +191,16 @@ public class Add_Donor extends AppCompatActivity  {
                     }
                     else {
                         Toast.makeText(Add_Donor.this, "Picture Upload failed.",Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.INVISIBLE);
+                        save_button.setClickable(true);
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-
+                    Toast.makeText(Add_Donor.this, "Picture Upload failed.",Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
+                    save_button.setClickable(true);
                 }
             });
 
@@ -241,12 +254,16 @@ public class Add_Donor extends AppCompatActivity  {
                        Top_Donor_Note data=new Top_Donor_Note(name,ImagedownloadUrl,department,batch,gender,blood_group,give_blood);
                        DocumentReference user=db.collection("All_donor_Info").document(blood_group).collection("Top_Donor").document(email);
                        user.set(data);
+                       progressBar.setVisibility(View.INVISIBLE);
+                       save_button.setClickable(true);
 
                    }
                }).addOnFailureListener(new OnFailureListener() {
                    @Override
                    public void onFailure(@NonNull Exception e) {
                        Toast.makeText(Add_Donor.this, "Donor Registered Failed...!", Toast.LENGTH_SHORT).show();
+                       progressBar.setVisibility(View.INVISIBLE);
+                       save_button.setClickable(true);
                    }
                });
 
@@ -262,6 +279,9 @@ public class Add_Donor extends AppCompatActivity  {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             uploadImage();
+                            if (mAuth.getCurrentUser().sendEmailVerification().isSuccessful()){
+                                Toast.makeText(getApplicationContext(), "Please Check Your Email...!", Toast.LENGTH_SHORT).show();
+                            }
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(getApplicationContext(), "Donor Registered failed", Toast.LENGTH_SHORT).show();
@@ -269,7 +289,14 @@ public class Add_Donor extends AppCompatActivity  {
 
                         // ...
                     }
-                });
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), "Donor Registered failed", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.INVISIBLE);
+                save_button.setClickable(true);
+            }
+        });
     }
 
     public boolean validate() {
@@ -356,8 +383,5 @@ public class Add_Donor extends AppCompatActivity  {
 
         return valid;
     }
-
-
-
 
 }

@@ -12,11 +12,14 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.github.ybq.android.spinkit.SpinKitView;
+import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -24,7 +27,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import javax.annotation.Nullable;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -36,6 +43,7 @@ public class Login_activity extends AppCompatActivity {
     TextView  newAccount,forgot_acc;
     private FirebaseAuth mAuth;
     FirebaseFirestore db;
+    ProgressBar progressBar;
 
 
 
@@ -56,6 +64,11 @@ public class Login_activity extends AppCompatActivity {
         newAccount=findViewById(R.id.login_to_new_id);
         forgot_acc=findViewById(R.id.forgot_id);
 
+        progressBar = (ProgressBar)findViewById(R.id.spin_kit_login);
+        FadingCircle fadingCircle = new FadingCircle();
+        progressBar.setIndeterminateDrawable(fadingCircle);
+
+
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
@@ -73,6 +86,8 @@ public class Login_activity extends AppCompatActivity {
                 if (valid()){
                     String blood_gp = spinner_login2.getSelectedItem().toString();
                     getBloodGroup(blood_gp);
+                    progressBar.setVisibility(View.VISIBLE);
+                    button.setClickable(false);
 
                 }
             }
@@ -105,9 +120,18 @@ public class Login_activity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            newIntent();
+                            if (mAuth.getCurrentUser().isEmailVerified()){
+                                newIntent();
+                                Toast.makeText(getApplicationContext(), "Authentication Success.", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(getApplicationContext(), "Email not Verified..!", Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.INVISIBLE);
+                                button.setClickable(true);
+                            }
                         } else {
                             Toast.makeText(getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.INVISIBLE);
+                            button.setClickable(true);
                         }
 
                     }
@@ -122,6 +146,9 @@ public class Login_activity extends AppCompatActivity {
         intent.putExtra("B_group",blood);
         intent.putExtra("email",email);
         startActivity(intent);
+        progressBar.setVisibility(View.INVISIBLE);
+        button.setClickable(true);
+
     }
 
     public boolean valid(){
@@ -154,54 +181,64 @@ public class Login_activity extends AppCompatActivity {
     public void getBloodGroup(final String blood_gp){
 
 
-        final String blood = spinner_login2.getSelectedItem().toString();
         final String email = log_email.getText().toString();
+        final String pass = log_pass.getText().toString();
 
-        DocumentReference log_valid_mail = db.collection("All_Blood_Group").document(blood).collection("Male").document(email);
-        log_valid_mail.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-
-                DocumentSnapshot doc = task.getResult();
-                if (doc.exists()){
-                     String u_blood_group = doc.get("Blood_Group").toString();
-
-                        if (blood_gp.equals(u_blood_group)){
-                            String email= log_email.getText().toString();
-                            String pass=log_pass.getText().toString();
-                            login(email,pass);
-                        }else {
-                            Toast.makeText(Login_activity.this, "Blood Group Not Match...!", Toast.LENGTH_LONG).show();
+            db.collection("All_Blood_Group").document(blood_gp).collection("Male").document(email)
+                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()){
+                        DocumentSnapshot doc=task.getResult();
+                        if (doc.exists()){
+                            login_valid(doc,blood_gp,email,pass);
                         }
-                }
-                else {
+                        else {
 
-                    DocumentReference log_valid_femail = db.collection("All_Blood_Group").document(blood).collection("Female").document(email);
-                    log_valid_femail.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            db.collection("All_Blood_Group").document(blood_gp).collection("Female").document(email)
+                                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
 
-                            DocumentSnapshot doc = task.getResult();
-                            if (doc.exists()){
-
-                                String u_blood_group = doc.get("Blood_Group").toString();
-                                if (blood_gp.equals(u_blood_group)){
-                                    String email= log_email.getText().toString();
-                                    String pass=log_pass.getText().toString();
-                                    login(email,pass);
-                                }else {
-                                    Toast.makeText(Login_activity.this, "Blood Group Not Match...!", Toast.LENGTH_LONG).show();
+                                    if (task.isSuccessful()){
+                                        DocumentSnapshot doc=task.getResult();
+                                        if (doc.exists()){
+                                            login_valid(doc,blood_gp,email,pass);
+                                        }
+                                        else {
+                                            Toast.makeText(getApplicationContext(),"User Not Found..!",Toast.LENGTH_SHORT).show();
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                            button.setClickable(true);
+                                        }
+                                    }else {
+                                        Toast.makeText(getApplicationContext(),"User Not Found..!",Toast.LENGTH_SHORT).show();
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                        button.setClickable(true);
+                                    }
                                 }
-                            }
-                            else {
-                                Toast.makeText(Login_activity.this, "You don't have an Account", Toast.LENGTH_LONG).show();
-                            }
-
+                            });
                         }
-                    });
+
+                    }else {
+                        Toast.makeText(getApplicationContext(),"Login Failed",Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.INVISIBLE);
+                        button.setClickable(true);
+
+                    }
                 }
+            });
 
             }
-        });
-    }
-}
+
+            public void login_valid(DocumentSnapshot doc,String blood_gp,String  email,String pass){
+                    String database_bg=doc.get("Blood_Group").toString();
+                    Log.i("Dataaaa",database_bg);
+                    if (database_bg.equals(blood_gp)){
+                        login(email,pass);
+                    }else {
+                        Toast.makeText(getApplicationContext(),"Blood Group Not Match",Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.INVISIBLE);
+                        button.setClickable(true);
+                    }
+            }
+        }

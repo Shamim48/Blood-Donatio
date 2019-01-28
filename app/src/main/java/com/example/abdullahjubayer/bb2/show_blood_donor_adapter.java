@@ -60,6 +60,9 @@ public class show_blood_donor_adapter extends BaseAdapter {
 
     @Override
     public int getCount() {
+        if (name.size()<=0){
+            Toast.makeText(context,"No Donor Register...!",Toast.LENGTH_SHORT).show();
+        }
         return name.size();
     }
 
